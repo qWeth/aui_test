@@ -37,7 +37,7 @@ aui_enable_tests(${PROJECT_NAME})
 
 # Setup icon, display name, etc
 aui_app(TARGET ${PROJECT_NAME}
-        NAME "AUI App Example"
+        NAME "GraphicNotes"
         VENDOR "AUI Project"
         ICON "assets/img/icon.svg"
 )

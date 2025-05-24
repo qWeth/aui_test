@@ -1,3 +1,5 @@
+#include <range/v3/all.hpp>
+#include <AUI/View/AForEachUI.h>
 #include "MainWindow.h"
 #include <AUI/Util/UIBuildingHelpers.h>
 #include <AUI/View/ALabel.h>
@@ -5,43 +7,93 @@
 #include <AUI/Platform/APlatform.h>
 #include <AUI/View/ADrawableView.h>
 #include <AUI/View/AProgressBar.h>
+#include <AUI/View/ASlider.h>
+#include <AUI/View/ASpacerFixed.h>
+#include <AUI/View/AScrollArea.h>
+#include <AUI/View/ASpinnerV2.h>
+#include <AUI/View/AText.h>
+// #include <AUI/Audio/IAudioPlayer.h>
+#include <range/v3/action/sort.hpp>
+#include <AUI/Platform/AMessageBox.h>
+// #include <AUI/Audio/ABadFormatException.h>
 
 using namespace declarative;
 
-MainWindow::MainWindow(_<MyUpdater> updater)
-  : AWindow("Project template app", 300_dp, 200_dp), mUpdater(std::move(updater)) {
-    setContents(Centered { Vertical {
-      Centered { Icon { ":img/icon.svg" } with_style { FixedSize(64_dp) } },
-      Centered { Label { "Hello world from AUI!" } },
-      _new<AButton>("Visit GitHub repo")
-          .connect(&AView::clicked, this, [] { APlatform::openUrl("https://github.com/aui-framework/aui"); }),
-      _new<AButton>("Visit docs")
-          .connect(&AView::clicked, this, [] { APlatform::openUrl("https://aui-framework.github.io/"); }),
-      _new<AButton>("Submit an issue")
-          .connect(
-              &AView::clicked, this, [] { APlatform::openUrl("https://github.com/aui-framework/aui/issues/new"); }),
-      CustomLayout {} & mUpdater->status.readProjected([&updater = mUpdater](const std::any& status) -> _<AView> {
-          if (std::any_cast<AUpdater::StatusIdle>(&status)) {
-              return _new<AButton>("Check for updates").connect(&AView::clicked, slot(updater)::checkForUpdates);
-          }
-          if (std::any_cast<AUpdater::StatusCheckingForUpdates>(&status)) {
-              return Label { "Checking for updates..." };
-          }
-          if (auto downloading = std::any_cast<AUpdater::StatusDownloading>(&status)) {
-              return Vertical {
-                  Label { "Downloading..." },
-                  _new<AProgressBar>() & downloading->progress,
-              };
-          }
-          if (std::any_cast<AUpdater::StatusWaitingForApplyAndRestart>(&status)) {
-              return _new<AButton>("Apply update and restart")
-                  .connect(&AView::clicked, slot(updater)::applyUpdateAndRestart);
-          }
-          return nullptr;
-      }),
-      Label { "Btw, 2 + 2 = {}"_format(sum(2, 2)) },
-      Label { "Version: " AUI_PP_STRINGIZE(AUI_CMAKE_PROJECT_VERSION) },
-    } });
+struct Song {
+    AString title;
+};
+
+struct State {
+    AVector<_<Song>> songs;
+};
+
+static _<AView> playlistView(){
+    return Centered::Expanding {Label { "hui" },};
+
+    // State& state
+    // return AScrollArea::Builder().
+    //     withContents(
+    //     AUI_DECLARATIVE_FOR(i, state.songs,  AVerticalLayout) {
+    //         return Label { i->title };
+    //     }
+    // );
 }
 
-int MainWindow::sum(int a, int b) { return a + b; }
+static _<AView> playerView(){
+    return Centered::Expanding{
+        Vertical {
+            Centered{
+                _new<AView>() with_style {
+                    FixedSize{192_dp},
+                    BackgroundSolid{AColor::GRAY},
+                    BorderRadius{4_dp},
+                    BoxShadow{0, 4_dp, 32_dp, AColor::BLACK.transparentize(0.7f) },
+                },
+            },
+
+            SpacerFixed { 16_dp },
+
+            _new<ASlider>(),
+            Horizontal{
+                Label {"0:00"} with_style { ATextAlign::CENTER},
+                SpacerExpanding{},
+                Label {"0:00"} with_style { ATextAlign::CENTER},
+            },
+
+            SpacerFixed { 16_dp },
+
+            Label { "Title" } with_style { ATextAlign::CENTER, FontSize(14_pt)},
+            Label { "Author" } with_style { ATextAlign::CENTER, FontSize(10_pt)},
+            Label { "Label" } with_style { ATextAlign::CENTER, FontSize(10_pt)},
+
+            Centered {
+                Horizontal{
+                    Button{ Label {"Prev"} with_style{TextColor { AColor::BLACK}} },
+                    Button{ Label {"Play"} with_style{TextColor { AColor::BLACK}} },
+                    Button{ Label {"Next"} with_style{TextColor { AColor::BLACK}} },
+                }
+            }
+        }
+    };
+}
+
+MainWindow::MainWindow()
+  : AWindow("Project template app", 800_dp, 600_dp) {
+
+    setExtraStylesheet(AStylesheet{
+        {
+            t<AView>(),
+            TextColor { AColor::WHITE},
+        },
+    });
+
+    setContents(Centered {
+        Horizontal::Expanding{
+            playlistView(),
+            playerView(),
+        }
+    } with_style {
+        BackgroundSolid { 0x333333_rgb },
+    });   
+}
+
