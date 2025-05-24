@@ -13,6 +13,8 @@
 #include <AUI/View/ASpinnerV2.h>
 #include <AUI/View/AText.h>
 // #include <AUI/Audio/IAudioPlayer.h>
+#include "fluent_icons.h"
+
 #include <range/v3/action/sort.hpp>
 #include <AUI/Platform/AMessageBox.h>
 // #include <AUI/Audio/ABadFormatException.h>
@@ -58,6 +60,23 @@ static _<AView> playerView(){
                 Label {"0:00"} with_style { ATextAlign::CENTER},
                 SpacerExpanding{},
                 Label {"0:00"} with_style { ATextAlign::CENTER},
+            },
+
+            Centered {
+                Horizontal {
+                    Label { fluent_icons::ic_fluent_previous_48_filled } with_style {
+                        Font { ":img/FluentSystemIcons-Filled.ttf" },
+                        FontSize { 32_dp },
+                    },
+                    Label { fluent_icons::ic_fluent_play_circle_48_filled } with_style {
+                        Font { ":img/FluentSystemIcons-Filled.ttf" },
+                        FontSize { 48_dp },
+                    },
+                    Label { fluent_icons::ic_fluent_next_48_filled } with_style {
+                        Font { ":img/FluentSystemIcons-Filled.ttf" },
+                        FontSize { 32_dp },
+                    },
+                } with_style { LayoutSpacing { 8_dp } },
             },
 
             SpacerFixed { 16_dp },
