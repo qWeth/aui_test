@@ -1,25 +1,21 @@
-#include "fluent_icons.h"
-#include "MainWindow.h"
-#include <AUI/Util/UIBuildingHelpers.h>
-#include <AUI/Platform/APlatform.h>
-#include <AUI/View/ADrawableView.h>
-#include <AUI/View/ASlider.h>
 #include <range/v3/all.hpp>
 #include <AUI/View/AForEachUI.h>
+#include "MainWindow.h"
+#include <AUI/Util/UIBuildingHelpers.h>
 #include <AUI/View/ALabel.h>
 #include <AUI/View/AButton.h>
 #include <AUI/Platform/APlatform.h>
 #include <AUI/View/ADrawableView.h>
 #include <AUI/View/AProgressBar.h>
+#include <AUI/View/ASlider.h>
 #include <AUI/View/ASpacerFixed.h>
 #include <AUI/View/AScrollArea.h>
 #include <AUI/View/ASpinnerV2.h>
 #include <AUI/View/AText.h>
-// #include <AUI/Audio/IAudioPlayer.h>
-
 #include <range/v3/action/sort.hpp>
 #include <AUI/Platform/AMessageBox.h>
-// #include <AUI/Audio/ABadFormatException.h>
+#include "fluent_icons.h"
+
 
 using namespace declarative;
 
